@@ -89,7 +89,6 @@
             console.log('checkPermission()');
             if (Notification.permission === 'granted') {
                 statusEl.textContent = 'Permission Granted';
-                requestToken();
             } else if (Notification.permission !== 'default') {
                 statusEl.textContent = 'Permission Denied';
             } else {
