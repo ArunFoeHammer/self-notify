@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Self Notification PWA</title>
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#1a73e8">
     <!-- Firebase SDKs (v12.12.1) -->
     <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js"></script>
     <!-- Shared Firebase Configuration -->
-    <script src="firebase-config.js"></script>
+    <script src="./firebase-config.js"></script>
     <style>
         body {
             font-family: sans-serif;
@@ -35,7 +35,7 @@
         #token-display {
             margin-top: 1rem;
             padding: 1rem;
-            background: #e8f0fe;
+            background: #e8f0be;
             border: 1px solid #d2e3fc;
             word-break: break-all;
             font-family: monospace;
@@ -56,7 +56,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Self-Notification PWA</h1>
+        <h1 class="title">Self-Notification PWA</h1>
         <p>Status: <span id="status">Initializing...</span></p>
         <button id="permission-btn" class="btn" style="display: none;">Enable Notifications</button>
         <div id="token-display">No token retrieved yet.</div>
@@ -74,7 +74,7 @@
         async function init() {
             if ('serviceWorker' in navigator) {
                 try {
-                    await navigator.serviceWorker.register('sw.js');
+                    await navigator.serviceWorker.register('./sw.js');
                     console.log('SW registered');
                     checkPermission();
                 } catch (err) {
@@ -107,6 +107,7 @@
                     await getTokenFromFirebase();
                 } else {
                     statusEl.textContent = 'Permission Denied';
+                    permissionBtn.style.description = 'none'; // Fix typo from previous attempt
                     permissionBtn.style.display = 'none';
                 }
             } catch (err) {
