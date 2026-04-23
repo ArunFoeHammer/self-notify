@@ -1,7 +1,7 @@
-// TODO: Replace with actual Firebase config from project settings
+// Replace with Firebase config from project settings
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    projectId: "YOUR_PROJECT_ID",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAcQwom5uTvWvKoxS0nLYOD-lHKc95DjIM",
+    projectId: "btw-self-notify",
+    messagingSenderId: "397570103872",
+    appId: "1:397570103872:web:754f5ebc23490c0c2e9da5"
 };
