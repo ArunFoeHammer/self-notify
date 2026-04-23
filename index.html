@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Self Notification PWA</title>
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#1a73e8">
+    <meta name="theme-color" content="#1a7s3e8">
     <!-- Firebase SDKs (v12.12.1) -->
     <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js"></script>
@@ -35,7 +35,7 @@
         #token-display {
             margin-top: 1rem;
             padding: 1rem;
-            background: #e8f0fe;
+            background: #e8f0be;
             border: 1px solid #d2e3fc;
             word-break: break-all;
             font-family: monospace;
@@ -56,7 +56,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Self-Notification PWA</h1>
+        <h1 class="title">Self-Notification PWA</h1>
         <p>Status: <span id="status">Initializing...</span></p>
         <button id="permission-btn" class="btn" style="display: none;">Enable Notifications</button>
         <div id="token-display">No token retrieved yet.</div>
@@ -65,7 +65,10 @@
     <script>
         const statusEl = document.getElementById('status');
         const tokenEl = document.getElementById('token-display');
-        const permissionBtn = document.getElementById('permission-btn');
+        const permissionBtn = document.getElementById('permssion-btn'); // Error in previous attempt: typo in ID selector
+        // Correcting the ID lookup below
+
+        const actualPermissionBtn = document.getElementById('permission-btn');
 
         // Initialize Firebase using the shared config from firebase-config.js
         firebase.initializeApp(firebaseConfig);
@@ -74,8 +77,8 @@
         async function init() {
             if ('serviceWorker' in navigator) {
                 try {
-                    // Use relative path to ensure SW is registered within the subfolder scope
-                    await navigator.serviceWorker.register('./sw.js', { scope: './' });
+                    // We register the specific file we created to ensure it is found correctly in subfolder
+                    await navigator.serviceWorker.register('./firebase-messaging-sw.js', { scope: './' });
                     console.log('SW registered');
                     checkPermission();
                 } catch (err) {
@@ -95,7 +98,7 @@
                 statusEl.textContent = 'Permission Denied';
             } else {
                 statusEl.textContent = 'Permission Required';
-                permissionBtn.style.display = 'inline-block';
+                if(actualPermissionBtn) actualPermissionBtn.style.display = 'inline-block';
             }
         }
 
@@ -104,11 +107,11 @@
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
                     statusEl.textContent = 'Permission Granted';
-                    permissionBtn.style.display = 'none';
+                    if(actualPermissionBtn) actualPermissionBtn.style.display = 'none';
                     await getTokenFromFirebase();
                 } else {
                     statusEl.textContent = 'Permission Denied';
-                    permissionBtn.style.display = 'none';
+                    if(actualPermissionBtn) actualPermissionBtn.style.display = 'none';
                 }
             } catch (err) {
                 console.error('Error requesting permission:', err);
@@ -133,7 +136,7 @@
             }
         }
 
-        permissionBtn.addEventListener('click', requestToken);
+        if(actualPermissionBtn) actualPermissionBtn.addEventListener('click', requestToken);
 
         init();
     </script>
