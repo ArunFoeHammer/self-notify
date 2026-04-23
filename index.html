@@ -9,6 +9,8 @@
     <!-- Firebase SDKs (v12.12.1) -->
     <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js"></script>
+    <!-- Shared Firebase Configuration -->
+    <script src="firebase-config.js"></script>
     <style>
         body {
             font-family: sans-serif;
@@ -50,7 +52,7 @@
             cursor: pointer;
         }
         .btn:disabled { background: #ccc; }
-    </string>
+    </style>
 </head>
 <body>
     <div class="container">
@@ -61,21 +63,11 @@
     </div>
 
     <script>
-        // TODO: Replace with actual Firebase config from project settings
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
         const statusEl = document.getElementById('status');
         const tokenEl = document.getElementById('token-display');
         const permissionBtn = document.getElementById('permission-btn');
 
-        // Initialize Firebase
+        // Initialize Firebase using the shared config from firebase-config.js
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
 
@@ -110,7 +102,7 @@
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
-                    statusEl.textContent = 'Permission Granted';
+                    status/textContent = 'Permission Granted';
                     permissionBtn.style.display = 'none';
                     await getTokenFromFirebase();
                 } else {
