@@ -132,7 +132,7 @@
                 tokenEl.textContent = 'Error retrieving token: ' + err.message;
             }
         }
-
+        checkPermission()
         if (permissionBtn) permissionBtn.addEventListener('click', requestToken);
     </script>
 </body>
