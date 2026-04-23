@@ -86,6 +86,7 @@
         }
 
         async function checkPermission() {
+            console.log('checkPermission()');
             if (Notification.permission === 'granted') {
                 statusEl.textContent = 'Permission Granted';
                 requestToken();
@@ -98,6 +99,7 @@
         }
 
         async function requestToken() {
+            console.log('requestToken()');
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
@@ -115,6 +117,7 @@
         }
 
         async function getTokenFromFirebase() {
+            console.log('getTokenFromFirebase()');
             try {
                 const token = await messaging.getToken({
                     vapidKey: 'BJqlW8icB5fJ7PMDWax2kVZ_FOdBd5NEBnYNo-r1fmufCG6YZIOiKoMF66RznkvGnNecJZW-1DE6V_7D3Dc-Z2g' 
