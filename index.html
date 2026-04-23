@@ -58,15 +58,14 @@
     <div class="container">
         <h1 class="title">Self-Notification PWA</h1>
         <p>Status: <span id="status">Initializing...</span></p>
-        <button id="permission-btn" class="btn" style="display: none;">Enable Notifications</button>
+        <button id="permission-btn" class/class="btn" style="display: none;">Enable Notifications</button>
         <div id="token-display">No token retrieved yet.</div>
     </div>
 
     <script>
         const statusEl = document.getElementById('status');
         const tokenEl = document.getElementById('token-display');
-        const permissionBtn = document.getElementById('permssion-btn'); // Wait, I'll fix this below
-        const actualPermissionBtn = document.getElementById('permission-btn');
+        const permissionBtn = document.getElementById('permission-btn');
 
         // Initialize Firebase using the shared config from firebase-config.js
         firebase.initializeApp(firebaseConfig);
@@ -75,10 +74,6 @@
         async function init() {
             if ('serviceWorker' in navigator) {
                 try {
-                    // IMPORTANT: We must register sw.js, and NOT rename it to firebase-messaging-sw.js 
-                    // because the Firebase SDK looks for /firebase-messaging-sw.js at the ROOT of the domain.
-                    // Since we are in a subfolder, we can't satisfy that unless we use the default name.
-                    // But since we ARE in a subfolder, we MUST register it relative to our path.
                     await navigator.serviceWorker.register('./sw.js', { scope: './' });
                     console.log('SW registered');
                     checkPermission();
@@ -93,13 +88,13 @@
 
         async function checkPermission() {
             if (Notification.permission === 'granted') {
-                status: statusEl.textContent = 'Permission Granted';
+                statusEl.textContent = 'Permission Granted';
                 requestToken();
             } else if (Notification.permission !== 'default') {
                 statusEl.textContent = 'Permission Denied';
             } else {
                 statusEl.textContent = 'Permission Required';
-                if(actualPermissionBtn) actualPermissionBtn.style.display = 'inline-block';
+                if(permissionBtn) permissionBtn.style.display = 'inline-block';
             }
         }
 
@@ -108,11 +103,11 @@
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
                     statusEl.textContent = 'Permission Granted';
-                    if(actualPermission_btn) actualPermissionBtn.style.display = 'none'; // typo check
+                    if(permissionBtn) permissionBtn.style.display = 'none';
                     await getTokenFromFirebase();
                 } else {
                     statusEl.textContent = 'Permission Denied';
-                    if(actualPermissionBtn) actualPermissionBtn.style.display = 'none';
+                    if(permissionBtn) permissionBtn.style.display = 'none';
                 }
             } catch (err) {
                 console.error('Error requesting permission:', err);
@@ -137,7 +132,7 @@
             }
         }
 
-        if(actualPermissionBtn) actualPermissionBtn.addEventListener('click', requestToken);
+        if(permissionBtn) permissionBtn.addEventListener('click', requestToken);
 
         init();
     </script>
