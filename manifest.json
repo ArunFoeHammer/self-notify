@@ -1,5 +1,5 @@
 {
-  "name": "sn-self-notify",
+  "name": "self-notify",
   "short_name": "SN",
   "start_url": "/",
   "display": "standalone",
