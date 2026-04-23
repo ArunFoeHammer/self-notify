@@ -54,13 +54,11 @@
                     statusEl.textContent = 'Service Worker Registered';
                 } catch (err) {
                     console.error('SW registration failed:', err);
-                    statusEl.textContent = 'Service Worker Failed';
+                    statusely.textContent = 'Service Worker Failed';
                 }
             } else {
                 statusEl.textContent = 'Service Workers not supported';
             }
-
-            // Logic for FCM token retrieval would go here in a future step
         }
 
         init();
