@@ -70,21 +70,19 @@
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
 
-        async function init() {
-            if ('serviceWorker' in navigator) {
-                try {
-                    navigator.serviceWorker.register('/self-notify/sw.js', { scope: '/self-notify/' })
-                        .then(registration => {
-                          console.log('Service Worker registered with scope:', registration.scope);
-                        });
-                    checkPermission();
-                } catch (err) {
-                    console.error('SW registration failed:', err);
-                    statusEl.textContent = 'Service Worker Failed';
-                }
-            } else {
-                statusEl.textContent = 'Service Workers not supported';
+        if ('serviceWorker' in navigator) {
+            try {
+                navigator.serviceWorker.register('/self-notify/sw.js', { scope: '/self-notify/' })
+                    .then(registration => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    });
+                checkPermission();
+            } catch (err) {
+                console.error('SW registration failed:', err);
+                statusEl.textContent = 'Service Worker Failed';
             }
+        } else {
+            statusEl.textContent = 'Service Workers not supported';
         }
 
         async function checkPermission() {
@@ -134,7 +132,6 @@
         }
 
         if (permissionBtn) permissionBtn.addEventListener('click', requestToken);
-        init();
     </script>
 </body>
 </html>
