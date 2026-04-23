@@ -107,7 +107,7 @@
                     await getTokenFromFirebase();
                 } else {
                     statusEl.textContent = 'Permission Denied';
-                    permissionBtn.style.description = 'none'; // Fix typo from previous attempt
+                    permissionBtn.style.description = 'none';
                     permissionBtn.style.display = 'none';
                 }
             } catch (err) {
