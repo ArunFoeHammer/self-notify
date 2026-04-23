@@ -75,7 +75,7 @@
                 try {
                     // Register sw.js with a scope that allows the Firebase SDK 
                     // to find its expected worker at the root of this subfolder path.
-                    await navigator.serviceWorker.register('./sw.js', { scope: './' });
+                    await navigator.serviceWorker.register('self-notify/sw.js');
                     console.log('SW registered');
                     checkPermission();
                 } catch (err) {
