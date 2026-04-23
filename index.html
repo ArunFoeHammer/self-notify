@@ -6,13 +6,18 @@
     <title>Self Notification PWA</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#1a73e8">
+    <!-- Firebase SDKs (v12.12.1) -->
+    <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js"></script>
+    <!-- Shared Firebase Configuration -->
+    <script src="firebase-config.js"></script>
     <style>
         body {
             font-family: sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             background-color: #f0f2f5;
         }
@@ -22,9 +27,11 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 80%;
+            max-width: 90%;
+            width: 400px;
         }
-        h1 { color: #1a73e8; }
+        h1 { color: #1a73e8; margin-top: 0; }
+        #status { font-weight: bold; }
         #token-display {
             margin-top: 1rem;
             padding: 1rem;
@@ -32,34 +39,100 @@
             border: 1px solid #d2e3fc;
             word-break: break-all;
             font-family: monospace;
+            font-size: 0.9rem;
+            text-align: left;
         }
+        .btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:disabled { background: #ccc; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Self-Notification PWA</h1>
         <p>Status: <span id="status">Initializing...</span></p>
+        <button id="permission-btn" class="btn" style="display: none;">Enable Notifications</button>
         <div id="token-display">No token retrieved yet.</div>
     </div>
 
     <script>
         const statusEl = document.getElementById('status');
         const tokenEl = document.getElementById('token-display');
+        const permissionBtn = document.getElementById('permission-btn');
+
+        // Initialize Firebase using the shared config from firebase-config.js
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
 
         async function init() {
             if ('serviceWorker' in navigator) {
                 try {
-                    const registration = await navigator.serviceWorker.register('/sw.js');
-                    console.log('SW registered:', registration);
-                    statusEl.textContent = 'Service Worker Registered';
+                    await navigator.serviceWorker.register('/sw.js');
+                    console.log('SW registered');
+                    checkPermission();
                 } catch (err) {
                     console.error('SW registration failed:', err);
-                    statusely.textContent = 'Service Worker Failed';
+                    statusEl.textContent = 'Service Worker Failed';
                 }
             } else {
                 statusEl.textContent = 'Service Workers not supported';
             }
         }
+
+        async function checkPermission() {
+            if (Notification.permission === 'granted') {
+                statusEl.textContent = 'Permission Granted';
+                requestToken();
+            } else if (Notification.permission !== 'default') {
+                statusEl.textContent = 'Permission Denied';
+            } else {
+                statusEl.textContent = 'Permission Required';
+                permissionBtn.style.display = 'inline-block';
+            }
+        }
+
+        async function requestToken() {
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    status/textContent = 'Permission Granted';
+                    permissionBtn.style.display = 'none';
+                    await getTokenFromFirebase();
+                } else {
+                    statusEl.textContent = 'Permission Denied';
+                    permissionBtn.style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Error requesting permission:', err);
+                statusEl.textContent = 'Error during permission request';
+            }
+        }
+
+        async function getTokenFromFirebase() {
+            try {
+                const token = await messaging.getToken({
+                    vapidKey: 'YOUR_VAPID_KEY' // TODO: Replace with actual VAPID key
+                });
+                if (token) {
+                    tokenEl.textContent = token;
+                    statusEl.textContent = 'Token Retrieved';
+                } else {
+                    tokenEl.textContent = 'No token received.';
+                }
+            } catch (err) {
+                console.error('Error retrieving token:', err);
+                tokenEl.textContent = 'Error retrieving token: ' + err.message;
+            }
+        }
+
+        permissionBtn.addEventListener('click', requestToken);
 
         init();
     </script>
