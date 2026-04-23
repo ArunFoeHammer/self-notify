@@ -73,8 +73,10 @@
         async function init() {
             if ('serviceWorker' in navigator) {
                 try {
-                    await navigator.serviceWorker.register('./sw.js');
-                    console.log('SW registered');
+                    navigator.serviceWorker.register('/self-notify/sw.js', { scope: '/' })
+                        .then(registration => {
+                          console.log('Service Worker registered with scope:', registration.scope);
+                        });
                     checkPermission();
                 } catch (err) {
                     console.error('SW registration failed:', err);
