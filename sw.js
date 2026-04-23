@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/11.0.2/firebase-messaging-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js');
 
 // TODO: Replace with actual Firebase config from project settings
 const firebaseConfig = {
