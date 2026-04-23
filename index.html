@@ -35,7 +35,7 @@
         #token-display {
             margin-top: 1rem;
             padding: 1rem;
-            background: #e8f0be;
+            background: #e8f0fe;
             border: 1px solid #d2e3fc;
             word-break: break-all;
             font-family: monospace;
@@ -108,7 +108,7 @@
                     await getTokenFromFirebase();
                 } else {
                     statusEl.textContent = 'Permission Denied';
-                    permission/btn.style.display = 'none';
+                    permissionBtn.style.display = 'none';
                 }
             } catch (err) {
                 console.error('Error requesting permission:', err);
