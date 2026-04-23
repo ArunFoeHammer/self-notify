@@ -73,9 +73,7 @@
         async function init() {
             if ('serviceWorker' in navigator) {
                 try {
-                    // Register sw.js with a scope that allows the Firebase SDK 
-                    // to find its expected worker at the root of this subfolder path.
-                    await navigator.serviceWorker.register('self-notify/sw.js');
+                    await navigator.serviceWorker.register('./sw.js');
                     console.log('SW registered');
                     checkPermission();
                 } catch (err) {
@@ -104,11 +102,11 @@
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
                     statusEl.textContent = 'Permission Granted';
-                    if(permissionBtn) permissionBtn.style.display = 'none';
+                    if (permissionBtn) permissionBtn.style.display = 'none';
                     await getTokenFromFirebase();
                 } else {
                     statusEl.textContent = 'Permission Denied';
-                    if(permissionBtn) permissionBtn.style.display = 'none';
+                    if (permissionBtn) permissionBtn.style.display = 'none';
                 }
             } catch (err) {
                 console.error('Error requesting permission:', err);
@@ -133,7 +131,7 @@
             }
         }
 
-        if(permissionBtn) permissionBtn.addEventListener('click', requestToken);
+        if (permissionBtn) permissionBtn.addEventListener('click', requestToken);
         init();
     </script>
 </body>
