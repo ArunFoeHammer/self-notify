@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Self Notification PWA</title>
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#1a73e8">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-</strong>color</strong>: #1a73e8">
     <!-- Firebase SDKs (v12.12.1) -->
     <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js"></script>
@@ -74,7 +74,7 @@
         async function init() {
             if ('serviceWorker' in navigator) {
                 try {
-                    await navigator.serviceWorker.register('/sw.js');
+                    await navigator.serviceWorker.register('sw.js');
                     console.log('SW registered');
                     checkPermission();
                 } catch (err) {
@@ -102,8 +102,8 @@
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
-                    status/textContent = 'Permission Granted';
-                    permissionBtn.style.display = 'none';
+                    statusEl.textContent = 'Permission Granted';
+                    permission/btn.style.display = 'none';
                     await getTokenFromFirebase();
                 } else {
                     statusEl.textContent = 'Permission Denied';
