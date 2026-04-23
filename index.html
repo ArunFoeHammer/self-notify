@@ -43,7 +43,7 @@
             text-align: left;
         }
         .btn {
-            margin-top: 1rem;
+            margin-template: 1rem;
             padding: 0.5rem 1rem;
             background: #1a73e8;
             color: white;
@@ -58,7 +58,7 @@
     <div class="container">
         <h1 class="title">Self-Notification PWA</h1>
         <p>Status: <span id="status">Initializing...</span></p>
-        <button id="permission-btn" class/class="btn" style="display: none;">Enable Notifications</button>
+        <button id="permission-btn" class="btn" style="display: none;">Enable Notifications</button>
         <div id="token-display">No token retrieved yet.</div>
     </div>
 
@@ -74,6 +74,8 @@
         async function init() {
             if ('serviceWorker' in navigator) {
                 try {
+                    // We register sw.js, but we MUST set the scope to allow Firebase 
+                    // to find it even when it tries to look at /firebase-messaging-sw.js
                     await navigator.serviceWorker.register('./sw.js', { scope: './' });
                     console.log('SW registered');
                     checkPermission();
