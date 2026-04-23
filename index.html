@@ -118,7 +118,8 @@
             console.log('getTokenFromFirebase()');
             try {
                 const token = await messaging.getToken({
-                    vapidKey: 'BJqlW8icB5fJ7PMDWax2kVZ_FOdBd5NEBnYNo-r1fmufCG6YZIOiKoMF66RznkvGnNecJZW-1DE6V_7D3Dc-Z2g' 
+                    vapidKey: 'BJqlW8icB5fJ7PMDWax2kVZ_FOdBd5NEBnYNo-r1fmufCG6YZIOiKoMF66RznkvGnNecJZW-1DE6V_7D3Dc-Z2g',
+                    serviceWorkerRegistration: registration
                 });
                 if (token) {
                     tokenEl.textContent = token;
