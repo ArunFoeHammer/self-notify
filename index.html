@@ -69,12 +69,14 @@
 
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
+        let serviceWorkerRegistration = null;
 
         if ('serviceWorker' in navigator) {
             try {
                 navigator.serviceWorker.register('/self-notify/sw.js', { scope: '/self-notify/' })
                     .then(registration => {
                         console.log('Service Worker registered with scope:', registration.scope);
+                        serviceWorkerRegistration = registration;
                     });
             } catch (err) {
                 console.error('SW registration failed:', err);
@@ -119,7 +121,7 @@
             try {
                 const token = await messaging.getToken({
                     vapidKey: 'BJqlW8icB5fJ7PMDWax2kVZ_FOdBd5NEBnYNo-r1fmufCG6YZIOiKoMF66RznkvGnNecJZW-1DE6V_7D3Dc-Z2g',
-                    serviceWorkerRegistration: registration
+                    serviceWorkerRegistration: serviceWorkerRegistration
                 });
                 if (token) {
                     tokenEl.textContent = token;
