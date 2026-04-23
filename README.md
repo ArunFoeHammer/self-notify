@@ -1,6 +1,4 @@
-# SN
-
-## Design Overview: Android PWA Self-Notification System
+# Android PWA Self-Notification System
 
 ## Architecture Summary
 
