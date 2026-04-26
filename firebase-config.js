@@ -5,3 +5,8 @@ const firebaseConfig = {
     messagingSenderId: "397570103872",
     appId: "1:397570103872:web:754f5ebc23490c0c2e9da5"
 };
+
+const firebaseConfigWithVapid = {
+    ...firebaseConfig,
+    vapidKey: 'YOUR_VAPID_KEY' // TODO: Replace with actual VAPID key if not already in config
+};
