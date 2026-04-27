@@ -8,7 +8,7 @@ A lightweight, serverless Progressive Web App (PWA) designed for Android that al
 
 1. **Hosting:** Static hosting (GitHub Pages/Firebase Hosting) providing HTTPS.
 2. **Frontend:** HTML5/JS interface for token display and permission handling.
-3. **Storage:** IndexedDB (via `idb-keyval`) for persistent, secure client-side storage of the FCM token.
+3. **Storage:** IndexedDB for persistent, secure client-side storage of the FCM token.
 4. **Push Engine:** Firebase Cloud Messaging (FCM) for delivery to Android devices.
 5. **Background Handler:** Service Worker (`sw.js`) to intercept push events and show system notifications.
 
