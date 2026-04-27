@@ -1,3 +1,4 @@
+let activeRegistration = null;
 const statusEl = document.getElementById('status');
 const tokenEl = document.getElementById('token-display');
 const permissionBtn = document.getElementById('permission-btn');
@@ -14,7 +15,8 @@ async function init() {
                 ? window.location.pathname 
                 : window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
 
-            await navigator.serviceWorker.register('sw.js', { scope: currentScope });
+            // Store the specific registration instance to be used by Firebase
+            activeRegistration = await navigator.serviceWorker.register('sw.js', { scope: currentScope });
             console.log('SW registered with scope:', currentScope);
             
             checkPermission();
@@ -64,9 +66,13 @@ async function requestPermission() {
  */
 async function requestToken() {
     try {
-        const registration = await navigator.serviceWorker.ready;
+        // Use the specific registration we captured during init to avoid undefined errors
+        if (!activeRegistration) {
+            throw new Error('Service Worker not registered');
+        }
+
         const token = await messaging.getToken({
-            serviceWorkerRegistration: registration,
+            serviceWorkerRegistration: activeRegistration,
             vapidKey: firebaseConfig.vapidKey
         });
 
