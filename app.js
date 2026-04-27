@@ -1,6 +1,7 @@
 const statusEl = document.getElementById('status');
 const tokenEl = document.getElementById('token-display');
 const permissionBtn = document.getElementById('permission-btn');
+const tokenBtn = document.getElementById('token-btn');
 
 // Initialize Firebase using the shared config from firebase-config.js
 firebase.initializeApp(firebaseConfig);
@@ -26,36 +27,41 @@ async function init() {
     }
 }
 
-async function checkPermission() {
+/**
+ * Checks current notification permission status and updates the UI visibility/text.
+ */
+function checkPermission() {
     if (Notification.permission === 'granted') {
         statusEl.textContent = 'Permission Granted';
-        requestToken();
+        permissionBtn.style.display = 'none';
+        tokenBtn.style.display = 'inline-block';
     } else if (Notification.permission !== 'default') {
         statusEl.textContent = 'Permission Denied';
         permissionBtn.style.display = 'none';
+        tokenBtn.style.display = 'none';
     } else {
         statusEl.textContent = 'Permission Required';
         permissionBtn.style.display = 'inline-block';
+        tokenBtn.style.display = 'none';
     }
 }
 
+/**
+ * Triggers the browser native notification permission prompt.
+ */
 async function requestPermission() {
     try {
         const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            statusEl.textContent = 'Permission Granted';
-            permissionBtn.style.display = 'none';
-            requestToken();
-        } else {
-            statusEl.textContent = 'Permission Denied';
-            permissionBtn.style.display = 'none';
-        }
+        checkPermission();
     } catch (err) {
         console.error('Error requesting permission:', err);
         statusEl.textContent = 'Error during permission request';
     }
 }
 
+/**
+ * Fetches the FCM registration token using the registered service worker.
+ */
 async function requestToken() {
     try {
         const registration = await navigator.serviceWorker.ready;
@@ -76,6 +82,8 @@ async function requestToken() {
     }
 }
 
+// UI Orchestration through event listeners
 permissionBtn.addEventListener('click', requestPermission);
+tokenBtn.addEventListener('click', requestToken);
 
 init();
