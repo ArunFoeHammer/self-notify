@@ -1,8 +1,6 @@
 const statusEl = document.getElementById('status');
 const tokenEl = document.getElementById('token-display');
-const permissionBtn = document.getElementById('perm-btn'); // Wait, I used permission-btn in HTML
-// Re-checking HTML... it is 'permission-btn'
-const permissionBtnActual = document.getElementById('permission-btn');
+const permissionBtn = document.getElementById('permission-btn');
 const tokenBtn = document.getElementById('token-btn');
 
 firebase.initializeApp(firebaseConfig);
@@ -11,22 +9,21 @@ let activeRegistration = null;
 
 /**
  * Single source of truth for UI state based on current application context.
- * This prevents the "stuck" button visibility issues observed in testing.
  */
 function updateUI() {
     const permission = Notification.permission;
     
     if (permission === 'granted') {
         statusEl.textContent = 'Permission Granted';
-        if(permissionBtnActual) permissionBtnActual.style.display = 'none';
+        if(permissionBtn) permissionBtn.style.display = 'none';
         if(tokenBtn) tokenBtn.style.display = 'inline-block';
     } else if (permission !== 'default') {
         statusEl.textContent = 'Permission Denied';
-        if(permissionBtnActual) permissionBtnActual.style.display = 'none';
+        if(permissionBtn) permissionBtn.style.display = 'none';
         if(tokenBtn) tokenBtn.style.display = 'none';
     } else {
         statusEl.textContent = 'Permission Required';
-        if(permissionBtnActual) permissionBtnActual.style.display = 'inline-block';
+        if(permissionBtn) permissionBtn.style.display = 'inline-block';
         if(tokenBtn) tokenBtn.style.display = 'none';
     }
 }
@@ -83,7 +80,7 @@ async function requestToken() {
 }
 
 // Event Listeners
-if(permissionBtnActual) permissionBtnActual.addEventListener('click', requestPermission);
-if(tokenBtn) tokenBtn.addEventListener('click', requestToken);
+if (permissionBtn) permissionBtn.addEventListener('click', requestPermission);
+if (tokenBtn) tokenBtn.addEventListener('click', requestToken);
 
 init();
