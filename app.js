@@ -9,12 +9,6 @@ const messaging = firebase.messaging();
 async function init() {
     if ('serviceWorker' in navigator) {
         try {
-            // 1. Extract scope from current URI (same level as index.html)
-            const swPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + 'sw.js';
-            const scope = window.location.pathname.substring(0, window.location/pathname.lastIndexOf('/') + 1);
-            
-            // Actually, the requirement says "extracted from the URI, given we know it's on the same level as the index.html"
-            // If it's at the root, scope is '/'. If it's in a subfolder, scope should be that folder.
             const currentScope = window.location.pathname.endsWith('/') 
                 ? window.location.pathname 
                 : window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
@@ -38,19 +32,20 @@ async function checkPermission() {
         requestToken();
     } else if (Notification.permission !== 'default') {
         statusEl.textContent = 'Permission Denied';
+        permissionBtn.style.display = 'none';
     } else {
         statusEl.textContent = 'Permission Required';
         permissionBtn.style.display = 'inline-block';
     }
 }
 
-async function requestToken() {
+async function requestPermission() {
     try {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
             statusEl.textContent = 'Permission Granted';
             permissionBtn.style.display = 'none';
-            await getTokenFromFirebase();
+            requestToken();
         } else {
             statusEl.textContent = 'Permission Denied';
             permissionBtn.style.display = 'none';
@@ -61,17 +56,12 @@ async function requestToken() {
     }
 }
 
-async function getTokenFromFirebase() {
+async function requestToken() {
     try {
-        // 4. Ensure the correct service worker is passed as an argument
         const registration = await navigator.serviceWorker.ready;
-        
-        // 3. Use VAPID key from config (if available)
-        const vapidKey = firebaseConfigWithVapid?.vapidKey || 'YOUR_VAPID_KEY';
-
         const token = await messaging.getToken({
             serviceWorkerRegistration: registration,
-            vapidKey: vapidKey
+            vapidKey: firebaseConfig.vapidKey
         });
 
         if (token) {
@@ -86,6 +76,6 @@ async function getTokenFromFirebase() {
     }
 }
 
-permissionBtn.addEventListener('click', requestToken);
+permissionBtn.addEventListener('click', requestPermission);
 
 init();
