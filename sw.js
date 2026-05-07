@@ -2,6 +2,9 @@ importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js');
 importScripts('firebase-config.js');
 
+// Change to force update of installed app in Android devices
+const verion = "0.1.0"
+
 // Initialize Firebase using the shared config from firebase-config.js
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
