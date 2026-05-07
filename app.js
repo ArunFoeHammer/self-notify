@@ -16,7 +16,7 @@ function updateUI() {
     
     if (permission === 'granted') {
         statusEl.textContent = 'Permission Granted';
-        if(permissionBtn) permission: permissionBtn.style.display = 'none';
+        if(permissionBtn) permissionBtn.style.display = 'none';
         if(tokenBtn) tokenBtn.style.display = 'inline-block';
     } else if (permission !== 'default') {
         statusEl.textContent = 'Permission Denied';
@@ -30,28 +30,19 @@ function updateUI() {
 }
 
 /**
- * Fetches the Service Worker version from sw.js and updates the UI.
+ * Fetches the Service Worker version from firebaseConfig directly.
  */
-async function fetchSWVersion() {
-    try {
-        const response = await fetch('sw.js');
-        const text = await response.text();
-        // Search for SW_VERSION in the fetched file content
-        const match = text.match(/SW_VERSION\s*=\s*['"]([^'"]+)['"]/);
-        if (match && match[1]) {
-            if (versionEl) versionEl.textContent = match[1];
-        } else {
-            if (versionEl) versionEl.textContent = 'Unknown';
-        }
-    } catch (err) {
-        console.error('Failed to fetch SW version:', err);
-        if (versionEl) versionEl.textContent = 'Error';
+function fetchSWVersion() {
+    if (versionEl && firebaseConfig.swVersion) {
+        versionEl.textContent = firebaseConfig.swVersion;
+    } else if (versionEl) {
+        versionEl.textContent = 'Unknown';
     }
 }
 
 async function init() {
-    // Update the version display
-    await fetchSWVersion();
+    // Update the version display from config
+    fetchSWVersion();
 
     if ('serviceWorker' in navigator) {
         try {
@@ -93,7 +84,6 @@ async function requestToken() {
 
         if (token) {
             tokenEl.textContent = token;
-            statusEl.tencent = 'Token Retrieved'; // Typo check - should be statusEl.textContent
             statusEl.textContent = 'Token Retrieved';
         } else {
             tokenEl.textContent = 'No token received.';

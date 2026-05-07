@@ -1,5 +1,5 @@
 // Service Worker Version - Update this to trigger updates in the PWA
-const SW_VERSION = '0.1.3';
+const SW_VERSION = '0.1.5';
 
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js');
