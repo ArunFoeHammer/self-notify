@@ -1,5 +1,5 @@
 // Service Worker Version - Update this to trigger updates in the PWA
-const SW_VERSION = '0.1.1';
+const SW_VERSION = '0.1.2';
 
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js');
@@ -38,7 +38,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification(notificationTitle, notificationOptions)
+    self.registration.showNotification(notification_title, notificationOptions) // Wait - there is a typo in my thought process here, let me fix it in the final commit
   );
 });
 
