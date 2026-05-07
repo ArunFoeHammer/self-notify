@@ -1,25 +1,23 @@
+// Service Worker Version - Update this to trigger updates in the PWA
+const SW_VERSION = '1.2';
+
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js');
 importScripts('firebase-config.js');
 
-// Change to force update of installed app in Android devices
-const verion = "0.1.0"
-
-// Initialize Firebase using the shared config from firebase-config.js
+// Initialize Firebase using the shared config from firebase-supports.js
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// Handle background notifications logic (data processing)
-// We avoid calling showNotification here because the 'push' event listener 
-// is our single source of truth for UI display, preventing duplicates.
-messaging.onBackgroundMessage((payload) => {
-  console.log('[sw.js] Received FCM background message payload:', payload);
-});
+/**
+ * Note: We rely solely on the 'push' event listener for notification display
+ * to prevent duplicate notifications caused by the Firebase SDK's 
+ * automatic background handling of the 'notification' payload property.
+ */
 
-// Single source of truth for UI notification display
-// This handles both FCM-specific pushes and standard web push events
+// Handle push event explicitly for better compatibility and single-source-of-truth
 self.addEventListener('push', (event) => {
-  console.log('[sw.js] Push event received');
+  console.log('[sw.js] Push event received. Version:', SW_VERSION);
   let data = {};
   
   if (event.data) {
@@ -36,7 +34,7 @@ self.addEventListener('push', (event) => {
   const notificationOptions = {
     body: data.notification?.body || data.body || '',
     icon: 'icons/192/pwa-192x192.png',
-    badge: 'icons/192/pwa-192x192.png' // Added badge for better Android integration
+    badge: 'icons/192/pwa-192x192.png' 
   };
 
   event.waitUntil(
