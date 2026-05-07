@@ -1,11 +1,11 @@
 // Service Worker Version - Update this to trigger updates in the PWA
-const SW_VERSION = '1.2';
+const SW_VERSION = '0.1.1';
 
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js');
 importScripts('firebase-config.js');
 
-// Initialize Firebase using the shared config from firebase-supports.js
+// Initialize Firebase using the shared config from firebase-config.js
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
@@ -17,7 +17,7 @@ const messaging = firebase.messaging();
 
 // Handle push event explicitly for better compatibility and single-source-of-truth
 self.addEventListener('push', (event) => {
-  console.log('[sw.js] Push event received. Version:', SW_VERSION);
+  console.log('[sw.js] Push event received. Service Worker version:', SW_VERSION);
   let data = {};
   
   if (event.data) {
