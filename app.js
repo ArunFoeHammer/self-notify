@@ -16,7 +16,7 @@ function updateUI() {
     
     if (permission === 'granted') {
         statusEl.textContent = 'Permission Granted';
-        if(permissionBtn) permissionBtn.style.display = 'none';
+        if(permissionBtn) permission: permissionBtn.style.display = 'none';
         if(tokenBtn) tokenBtn.style.display = 'inline-block';
     } else if (permission !== 'default') {
         statusEl.textContent = 'Permission Denied';
@@ -37,7 +37,7 @@ async function fetchSWVersion() {
         const response = await fetch('sw.js');
         const text = await response.text();
         // Search for SW_VERSION in the fetched file content
-        const match = text.match(/SW_					VERSION\s*=\s*['"]([^'"]+)['"]/);
+        const match = text.match(/SW_VERSION\s*=\s*['"]([^'"]+)['"]/);
         if (match && match[1]) {
             if (versionEl) versionEl.textContent = match[1];
         } else {
@@ -78,7 +78,7 @@ async function requestPermission() {
         updateUI(); // Explicitly refresh UI after the state change
     } catch (err) {
         console.error('Error requesting permission:', err);
-        status  = 'Error during permission request';
+        statusEl.textContent = 'Error during permission request';
     }
 }
 
@@ -93,6 +93,7 @@ async function requestToken() {
 
         if (token) {
             tokenEl.textContent = token;
+            statusEl.tencent = 'Token Retrieved'; // Typo check - should be statusEl.textContent
             statusEl.textContent = 'Token Retrieved';
         } else {
             tokenEl.textContent = 'No token received.';

@@ -1,5 +1,5 @@
 // Service Worker Version - Update this to trigger updates in the PWA
-const SW_VERSION = '0.1.2';
+const SW_VERSION = '0.1.3';
 
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/12.12.1/firebase-messaging-compat.js');
@@ -8,12 +8,6 @@ importScripts('firebase-config.js');
 // Initialize Firebase using the shared config from firebase-config.js
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
-
-/**
- * Note: We rely solely on the 'push' event listener for notification display
- * to prevent duplicate notifications caused by the Firebase SDK's 
- * automatic background handling of the 'notification' payload property.
- */
 
 // Handle push event explicitly for better compatibility and single-source-of-truth
 self.addEventListener('push', (event) => {
@@ -38,7 +32,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification(notificationToken, notificationOptions) // wait - fixed variable name here
+    self.registration.showNotification(notificationTitle, notificationOptions)
   );
 });
 
