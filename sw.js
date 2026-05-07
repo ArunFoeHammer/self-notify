@@ -6,35 +6,34 @@ importScripts('firebase-config.js');
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// Handle background notifications
+// Handle background notifications logic (data processing)
+// We avoid calling showNotification here because the 'push' event listener 
+// is our single source of truth for UI display, preventing duplicates.
 messaging.onBackgroundMessage((payload) => {
-  console.log('[sw.js] Received background message ', payload);
-
-  const notificationTitle = payload.notification?.title || 'New Notification';
-  const notificationOptions = {
-    body: payload.notification?.body || '',
-    icon: 'icons/192/pwa-192x192.png'
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  console.log('[sw.js] Received FCM background message payload:', payload);
 });
 
-// Handle push event explicitly for better compatibility with some browsers
+// Single source of truth for UI notification display
+// This handles both FCM-specific pushes and standard web push events
 self.addEventListener('push', (event) => {
   console.log('[sw.js] Push event received');
   let data = {};
+  
   if (event.data) {
     try {
       data = event.data.json();
     } catch (e) {
+      // Fallback for plain text payloads
       data = { title: 'New Notification', body: event.data.text() };
     }
   }
 
+  // Extract title and body from nested FCM structure or top-level structure
   const notificationTitle = data.notification?.title || data.title || 'New Notification';
   const notificationOptions = {
     body: data.notification?.body || data.body || '',
-    icon: 'icons/192/pwa-192x192.png'
+    icon: 'icons/192/pwa-192x192.png',
+    badge: 'icons/192/pwa-192x192.png' // Added badge for better Android integration
   };
 
   event.waitUntil(
