@@ -18,3 +18,39 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+// Handle push event explicitly for better compatibility with some browsers
+self.addEventListener('push', (event) => {
+  console.log('[sw.js] Push event received');
+  let data = {};
+  if (event.data) {
+    try {
+      data = event.data.json();
+    } catch (e) {
+      data = { title: 'New Notification', body: event.data.text() };
+    }
+  }
+
+  const notificationTitle = data.notification?.title || data.title || 'New Notification';
+  const notificationOptions = {
+    body: data.notification?.body || data.body || '',
+    icon: '/icons/192/pwa-192x192.png'
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(notificationTitle, notificationOptions)
+  );
+});
+
+// Handle click on notification to focus the window
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      if (clientList.length > 0) {
+        return clientList[0].focus();
+      }
+      return clients.openWindow('/');
+    })
+  );
+});
