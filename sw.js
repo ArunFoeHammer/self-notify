@@ -13,7 +13,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification?.title || 'New Notification';
   const notificationOptions = {
     body: payload.notification?.body || '',
-    icon: '/icons/192/pwa-192x192.png'
+    icon: 'icons/192/pwa-192x192.png'
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
@@ -34,7 +34,7 @@ self.addEventListener('push', (event) => {
   const notificationTitle = data.notification?.title || data.title || 'New Notification';
   const notificationOptions = {
     body: data.notification?.body || data.body || '',
-    icon: '/icons/192/pwa-192x192.png'
+    icon: 'icons/192/pwa-192x192.png'
   };
 
   event.waitUntil(
