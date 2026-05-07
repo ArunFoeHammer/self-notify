@@ -1,6 +1,6 @@
 {
-  "name": "self-notify",
-  "short_name": "SN",
+  "name": "Self-Notify PWA",
+  "short_name": "Self-Notify",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f0f2f5",
