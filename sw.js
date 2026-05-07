@@ -38,7 +38,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification(notification_title, notificationOptions) // Wait - there is a typo in my thought process here, let me fix it in the final commit
+    self.registration.showNotification(notificationToken, notificationOptions) // wait - fixed variable name here
   );
 });
 

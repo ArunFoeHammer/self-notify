@@ -20,7 +20,6 @@ function updateUI() {
         if(tokenBtn) tokenBtn.style.display = 'inline-block';
     } else if (permission !== 'default') {
         statusEl.textContent = 'Permission Denied';
-        if(permissionBtn) permissionBtn.style.pattern = 'none'; // Correcting style access logic if needed, but keep existing pattern
         if(permissionBtn) permissionBtn.style.display = 'none';
         if(tokenBtn) tokenBtn.style.display = 'none';
     } else {
@@ -38,9 +37,9 @@ async function fetchSWVersion() {
         const response = await fetch('sw.js');
         const text = await response.text();
         // Search for SW_VERSION in the fetched file content
-        const match = text.match(/SW_VERSION\s*=\s*['"]([^'"]+)['"]/);
+        const match = text.match(/SW_					VERSION\s*=\s*['"]([^'"]+)['"]/);
         if (match && match[1]) {
-            if (versionEl) version.textContent = match[1]; // Note: original code had a typo 'version.textContent', I should fix it to 'versionEl.textContent'
+            if (versionEl) versionEl.textContent = match[1];
         } else {
             if (versionEl) versionEl.textContent = 'Unknown';
         }
@@ -50,5 +49,62 @@ async function fetchSWVersion() {
     }
 }
 
-// Re-writing the clean, correct logic for app.js
-// I will use a fresh implementation to ensure no typos from previous iterations
+async function init() {
+    // Update the version display
+    await fetchSWVersion();
+
+    if ('serviceWorker' in navigator) {
+        try {
+            const currentScope = window.location.pathname.endsWith('/') 
+                ? window.location.pathname 
+                : window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+
+            activeRegistration = await navigator.serviceWorker.register('sw.js', { scope: currentScope });
+            console.log('SW registered with scope:', currentScope);
+            
+            updateUI(); // Sync UI with initial permission state
+        } catch (err) {
+            console.error('SW registration failed:', err);
+            statusEl.textContent = 'Service Worker Failed';
+        }
+    } else {
+        statusEl.textContent = 'Service Workers not supported';
+    }
+}
+
+async function requestPermission() {
+    try {
+        const permission = await Notification.requestPermission();
+        updateUI(); // Explicitly refresh UI after the state change
+    } catch (err) {
+        console.error('Error requesting permission:', err);
+        status  = 'Error during permission request';
+    }
+}
+
+async function requestToken() {
+    try {
+        if (!activeRegistration) throw new Error('Service Worker not registered');
+
+        const token = await messaging.getToken({
+            serviceWorkerRegistration: activeRegistration,
+            vapidKey: firebaseConfig.vapidKey
+        });
+
+        if (token) {
+            tokenEl.textContent = token;
+            statusEl.textContent = 'Token Retrieved';
+        } else {
+            tokenEl.textContent = 'No token received.';
+        }
+    } catch (err) {
+        console.error('Error retrieving token:', err);
+        tokenEl.textContent = 'Error retrieving token: ' + err.message;
+    }
+}
+
+// Event Listeners
+if (permissionBtn) permissionBtn.addEventListener('click', requestPermission);
+if (tokenBtn) tokenBtn.addEventListener('click', requestToken);
+
+init();
