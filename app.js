@@ -2,6 +2,7 @@ const statusEl = document.getElementById('status');
 const tokenEl = document.getElementById('token-display');
 const permissionBtn = document.getElementById('permission-btn');
 const tokenBtn = document.getElementById('token-btn');
+const versionEl = document.getElementById('sw-version');
 
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
@@ -28,7 +29,21 @@ function updateUI() {
     }
 }
 
+/**
+ * Fetches the Service Worker version from firebaseConfig directly.
+ */
+function fetchSWVersion() {
+    if (versionEl && firebaseConfig.swVersion) {
+        versionEl.textContent = firebaseConfig.swVersion;
+    } else if (versionEl) {
+        versionEl.textContent = 'Unknown';
+    }
+}
+
 async function init() {
+    // Update the version display from config
+    fetchSWVersion();
+
     if ('serviceWorker' in navigator) {
         try {
             const currentScope = window.location.pathname.endsWith('/') 
